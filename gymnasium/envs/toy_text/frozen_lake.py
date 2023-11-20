@@ -270,10 +270,12 @@ class FrozenLakeEnv(Env):
                         li.append((1.0, s, 0, True))
                     else:
                         if is_slippery:
-                            for b in [(a - 1) % 4, a, (a + 1) % 4]:
-                                li.append(
-                                    (1.0 / 3.0, *update_probability_matrix(row, col, b))
-                                )
+                            # Intended direction with 0.8 probability
+                            li.append((0.8, *update_probability_matrix(row, col, a)))
+
+                            # Perpendicular directions with 0.1 probability each
+                            li.append((0.1, *update_probability_matrix(row, col, (a - 1) % 4)))
+                            li.append((0.1, *update_probability_matrix(row, col, (a + 1) % 4)))
                         else:
                             li.append((1.0, *update_probability_matrix(row, col, a)))
 
