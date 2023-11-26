@@ -257,7 +257,13 @@ class FrozenLakeEnv(Env):
             newstate = to_s(newrow, newcol)
             newletter = desc[newrow, newcol]
             terminated = bytes(newletter) in b"GH"
-            reward = float(newletter == b"G")
+            # Modify the reward structure
+            if newletter == b"G":  # Goal reached
+                reward = 1.0
+            elif newletter == b"H":  # Fell into a hole
+                reward = -1.0
+            else:  # Regular step
+                reward = -0.01
             return newstate, reward, terminated
 
         for row in range(nrow):
